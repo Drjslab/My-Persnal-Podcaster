@@ -5,25 +5,12 @@ class GenAI:
         # Initialize with model selection and API key setup
         self.model = model
         self.client = OpenAI(api_key=api_key)
-        self.josnFormat = {
-            'Idea': '',
-            'Abstract': '',
-            'Objectives': '',
-            'Hypothesis': '',
-            'Methodology': '',
-            'Experimental_setup': '',
-            'Conclusion': '',
-            'Future_Study': '',
-            'title': '',
-            'emoji': 'only one related to topic'
-        }
-
-
     
-    def generate(self, prompt, max_tokens=2048, temperature=0.7):
+    
+    def generate(self, prompt, max_tokens=2048, temperature=0.7, system_prompt):
         # Format the conversation as a list of messages with role and content
         conversation = [
-            {"role": "system", "content": f"You are a helpful research assistant and only gives answer in JSON format {self.josnFormat} follwoing research idea."},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ]
         
@@ -42,6 +29,14 @@ class GenAI:
         except Exception as e:
             print(f"An error occurred: {e}")
             return None
+    
+    def textToAudio(self, text, model="tts-1", voice="alloy", audio_file="output.mp3"):
+        response = client.audio.speech.create(
+            model=model,
+            voice=voice,
+            input=text,
+        )
+        response.stream_to_file(audio_file)    
 
 if __name__ == "__main__":
     # Example usage:
