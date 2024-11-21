@@ -1,13 +1,14 @@
 from openai import OpenAI
+import base64
 
 class GenAI:
-    def __init__(self, model="gpt-4", api_key=None):
+    def __init__(self, model="gpt-4o", api_key=None):
         # Initialize with model selection and API key setup
         self.model = model
         self.client = OpenAI(api_key=api_key)
     
     
-    def generate(self, prompt, max_tokens=2048, temperature=0.7, system_prompt):
+    def generate(self, prompt, max_tokens=2048, temperature=0.7, system_prompt="You are helpful chatbot."):
         # Format the conversation as a list of messages with role and content
         conversation = [
             {"role": "system", "content": system_prompt},
@@ -30,13 +31,23 @@ class GenAI:
             print(f"An error occurred: {e}")
             return None
     
-    def textToAudio(self, text, model="tts-1", voice="alloy", audio_file="output.mp3"):
-        response = client.audio.speech.create(
-            model=model,
-            voice=voice,
-            input=text,
+    def textToAudio(self, text, model="tts-1", voice="shimmer", audio_file="output.mp3", system_prompt="You are helpful chatbot."):
+        completion = self.client.chat.completions.create(
+            model="gpt-4o-audio-preview",
+            modalities=["text", "audio"],
+            audio={"voice": voice, "format": "wav"},
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {
+                    "role": "user",
+                    "content": text
+                }
+            ]
         )
-        response.stream_to_file(audio_file)    
+        
+        wav_bytes = base64.b64decode(completion.choices[0].message.audio.data)
+        with open(audio_file, "wb") as f:
+            f.write(wav_bytes)    
 
 if __name__ == "__main__":
     # Example usage:

@@ -1,4 +1,4 @@
-class ReadText:
+class ReadWriteTextFile:
     def __init__(self):
         pass
     
@@ -20,10 +20,25 @@ class ReadText:
             return f"Error: The file at {path} was not found."
         except IOError:
             return f"Error: An error occurred while trying to read the file at {path}."
+    
+    def write(self, content, file_name=None):
+        """
+        Save the given content into a text file.
+        
+        :param content: The text content to save.
+        :param file_name: Optional file name to save the content to.
+        """
+        file_to_save = file_name if file_name else self.file_name
+        
+        try:
+            with open(file_to_save, 'w') as file:
+                file.write(content)
+        except Exception as e:
+            print(f"An error occurred while saving the file: {e}")
 
 # Only run the following if this script is executed directly
 if __name__ == "__main__":
     path = input("Enter the path to the text file: ")
-    reader = ReadText()
+    reader = ReadWriteTextFile()
     result = reader.read()
     print(result)
