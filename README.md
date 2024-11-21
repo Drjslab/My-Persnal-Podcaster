@@ -1,5 +1,7 @@
 # My-Persnal-Podcaster
-1. Load PDF move to TEXT 
-2. Send to Generate Podcast for the same
-3. Genreate Audio to genreated text
-# 
+
+
+# Set .env file
+```
+OPEN_AI="sk-proj-dDcOQpsHf-A3Iatuj2N3gfPr5CqZM316J6W5742OfIXs53gu92m8OUOR_G**********************"
+```
